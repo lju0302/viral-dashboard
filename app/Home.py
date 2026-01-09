@@ -38,8 +38,10 @@ st.markdown("""
     📌 연구 질문
   </div>
   <ul style="margin:0; padding-left:18px;">
-    <li>틱톡 노출이 음악 스트리밍에 기여하는 <b>인과적 효과</b>는 얼마나 되는가?</li>
-    <li>바이럴은 어떤 <b>유형</b>으로 구분되며, 각 유형의 <b>특성</b>은 무엇인가?</li>
+    <li>SNS 바이럴이 음악 스트리밍을 정말로 증가시킬까?</li>
+    <li>그렇다면 과연 얼마나 증가시킬까?</li>        
+    <li>바이럴은 모두 같은 양상으로 나타날까? 아니라면, 어떤 유형이 있을 것인가?</li>
+    <li>미리 어떤 유형의 바이럴이 나타날지 예측할 수 있을까?</li>
   </ul>
 </div>
 """, unsafe_allow_html=True)
@@ -84,49 +86,51 @@ st.markdown("""
 
 col1, col2, col3, col4 = st.columns(4)
 ##############################################
-# 더미 데이터 임시 사용중, 데이터 로드 후 코드 교체 필요 ☣️☠️‼️
-##############################################
-n_songs = "-" #songs.shape[0]
-date_min = "-"  #streaming["date"].min().date()
-date_max = "-" #streaming["date"].max().date()
-avg_ate = "-" #songs["ate_stream"].mean() * 100
-n_clusters = "-" #songs["cluster"].nunique()
+n_songs = "1158" #songs.shape[0]
+date_min = "2023-01-01"  #streaming["date"].min().date()
+date_max = "2024-12-31" #streaming["date"].max().date()
+avg_ate = "평균 40% / 최대 80%" #songs["ate_stream"].mean() * 100
+n_clusters = "6" #songs["cluster"].nunique()
 
 with col1:
     st.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-label">총 곡 수</div>
         <div class="kpi-value">{n_songs}</div>
-        <div class="kpi-sub">분석 대상 트랙 개수</div>
+        <div class="kpi-sub">Spotify Daily Chart 등재 한국(ISRC 기준) 곡</div>
     </div>
     """, unsafe_allow_html=True)
+    # st.metric(label="총 곡 수", value=f"{n_songs}", delta=None, delta_color="normal")
 
 with col2:
     st.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-label">데이터 기간</div>
         <div class="kpi-value">{date_min} ~ {date_max}</div>
-        <div class="kpi-sub">Spotify 일별 스트리밍 기준</div>
+        <div class="kpi-sub">기간 내 발매 곡, 일별 사용량(스트리밍, Tiktok 노출)</div>
     </div>
     """, unsafe_allow_html=True)
+    # st.metric(label="데이터 기간", value=f"{date_min} ~ {date_max}", delta=None, delta_color="normal")
 
 with col3:
     st.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-label">바이럴 유형의 수 (K)</div>
         <div class="kpi-value">{n_clusters}</div>
-        <div class="kpi-sub">K-SARIMAX 기반 그룹</div>
+        <div class="kpi-sub">엘보우, 실루엣 계수 기준</div>
     </div>
     """, unsafe_allow_html=True)
+    # st.metric(label="바이럴 유형의 수 (K)", value=f"{n_clusters}", delta=None, delta_color="normal")
 
 with col4:
     st.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-label">상위그룹 ATE (TikTok → Streaming)</div>
         <div class="kpi-value">{avg_ate}</div>
-        <div class="kpi-sub"> 성장패턴 상위 그룹(k = 3,4) 증분 추정치</div>
+        <div class="kpi-sub"> C5(쇼크형) 기준 </div>
     </div>
     """, unsafe_allow_html=True)
+    # st.metric(label="상위그룹 ATE (TikTok → Streaming)", value=f"{avg_ate}", delta=None, delta_color="normal")
 
 st.text("\n")
 

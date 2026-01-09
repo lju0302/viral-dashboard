@@ -107,26 +107,21 @@ with st.container(border=True):
                 danceability = st.number_input("danceability (0~100)", min_value=0, max_value=100, value=int(defaults["danceability"]))
                 happiness = st.number_input("happiness (0~100)", min_value=0, max_value=100, value=int(defaults["happiness"]))
                 acousticness = st.number_input("acousticness (0~100)", min_value=0, max_value=100, value=int(defaults["acousticness"]))
+                release_year = st.number_input("release_year", min_value=1990, max_value=2035, value=int(defaults["release_year"]))                
             with c2:
                 liveness = st.number_input("liveness (0~100)", min_value=0, max_value=100, value=int(defaults["liveness"]))
                 speechiness = st.number_input("speechiness (0~100)", min_value=0, max_value=100, value=int(defaults["speechiness"]))
                 loudness = st.number_input("loudness (예: -12 ~ 0)", min_value=-60, max_value=10, value=int(defaults["loudness"]))
+                instrumentalness = st.number_input("instrumentalness (0~100)", min_value=0, max_value=100, value=int(defaults["instrumentalness"]))
                 career_years = st.number_input("career_years", min_value=0, max_value=60, value=int(defaults["career_years"]))
 
             # 범주/이진 변수
             company_class = st.selectbox(
                 "class (company size)",
                 options=["big3", "mid", "small"],
-                index=["big3", "mid", "small"].index(str(defaults["class"])) if str(defaults["class"]) in ["big3","mid","small"] else 2
+                index=["big3", "mid", "small"].index(str(defaults["class"])) if str(defaults["class"]) in ["big3","mid","small"] else 2,
+                help = "기획사 규모 분류"
             )
-            
-            instrumentalness = st.number_input("instrumentalness (0~100)",
-                                               min_value=0, max_value=100,
-                                               value=int(defaults["instrumentalness"]),
-                                               help="악기음 비율이 높을수록 100에 가까움")
-                                               
-            release_year = st.number_input("release_year", min_value=1990, max_value=2035, value=int(defaults["release_year"]))
-
 
             existence = st.checkbox(
                 "existence (binary)",
