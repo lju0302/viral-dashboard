@@ -113,7 +113,7 @@ st.header("3️⃣ 데이터 수집 및 관리")
 step1, step2, step3 = st.columns(3)
 
 with step1:
-    st.markdown("### **Step 1. 데이터 수집n**")
+    st.markdown("### **Step 1. 데이터 수집**")
     st.info("""
     - **Music Meta**: Tunebat, Kworb, Spotify API (피쳐, 차트)
     - **Performance**: Chartmetric (일별 스트리밍, 인기도)
