@@ -113,7 +113,7 @@ st.header("3️⃣ 데이터 수집 및 관리")
 step1, step2, step3 = st.columns(3)
 
 with step1:
-    st.markdown("### **Step 1. 데이터 수집n**")
+    st.markdown("### **Step 1. 데이터 수집**")
     st.info("""
     - **Music Meta**: Tunebat, Kworb, Spotify API (피쳐, 차트)
     - **Performance**: Chartmetric (일별 스트리밍, 인기도)
@@ -127,7 +127,7 @@ with step2:
     st.write("### 🌩️ **Supabase** (PostgreSQL)")
     st.write("수집된 1,158곡의 시계열 데이터를 클라우드 DB에 적재하여 데이터 무결성을 확보하고, 곡/아티스트/소속사별 id를 부여해 데이터 간 연결성을 확보했습니다.")
     st.write("🎨 데이터베이스 ERD : ")
-    st.image('src/image/erd.png')
+    st.image('src/image/ERD.png')
 
 
 with step3:

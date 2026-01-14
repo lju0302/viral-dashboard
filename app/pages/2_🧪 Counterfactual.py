@@ -8,76 +8,100 @@ st.set_page_config(page_title="Counterfactual", layout="wide")
 st.title("🧪 Counterfactual")
 st.caption("K-SARIMAX 소개 / 반사실 예시")
 
+# 스타일 지정
+def highlight_box(title: str, body: str, icon: str = "💡"):
+    st.markdown(
+        f"""
+<div style="
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border: 1px solid #dbeafe;
+    border-left: 8px solid #3b82f6;
+    border-radius: 16px;
+    padding: 10px 16px;
+    margin: 10px 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+">
+<div style="
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #1e3a8a;
+">
+    {icon} {title}
+</div>
+<div style="
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #0f172a;
+    white-space: pre-wrap;
+">
+    {body}
+</div>
+</div>
+""",
+unsafe_allow_html=True,
+    )
+
+
+
 # 상단: 모델 소개 + 선정 이유
 st.header("1) 모델 소개 및 선정 이유 (K-SARIMAX)")
-with st.container(border=True):
-    left, right = st.columns([1, 1])
-    with left:
-        st.subheader("모델 개요")
-        st.subheader("👌직관으로 설명하는 ARIMA")
+t1, t2 = st.tabs(["ARIMA에 대해", "K-SARIMAX 모델의 특징"])
+
+with t1:
+    arima_text = """
+우리는 어제 들은 음악을 오늘도 듣고, 내일도 들을 것입니다. \n또한, 출근과 쉬는 날 등의 행동 패턴에 따라서 청취 패턴이 유사하게 반복되기도 합니다. \n이를테면, 출근하는 시간마다 특정 플레이리스트를 듣는 식이죠. 
+이런 식으로 음악 청취는 시간에 따라 누적되는 패턴과 변화 추세를 보입니다.\n이러한 패턴과 추세를 포착하는 데에 적합한 모델이 바로 **ARIMA** 모델입니다.
+"""
+
+    highlight_box(
+        title="직관으로 이해하는 ARIMA",
+        body=arima_text,
+        icon="👌"
+    )
+    toggle = st.toggle('더 자세한 설명 보기')
+    if toggle:
+        with st.container(border = True):
+            st.markdown("""### ARIMA를 구성하는 세 가지 요소
+                        - AR(Autoregressive, 자기회귀) : 현재 시점의 값이 자신의 과거 관측값(과거 데이터 포인트)들에 대한 선형 결합으로 설명됩니다. 'p'개의 과거 값을 사용하며, 데이터의 추세(Trend)를 모델링하는 데 도움을 줍니다.
+    - I(Integrated, 적분/차분) : 시계열 데이터가 정상성(Stationarity)을 갖도록 만들기 위해 데이터를 차분(difference)하는 과정입니다. 정상성을 만족하지 않는(비정상) 시계열 데이터를 정상 시계열로 변환하며, 'd'번 차분합니다.
+    - MA(Moving Average, 이동평균) : 개념: 현재 시점의 값이 과거 예측 오차들의 선형 결합으로 설명됩니다. 'q'개의 과거 오차 항을 사용하여 시계열의 불규칙한 패턴이나 노이즈를 모델링합니다.
+                """)
+
+with t2:
+    st.markdown("### 🔍 Key Characteristics of K-SARIMAX")
+    c_1, c_2, c_3 = st.columns(3, gap="large")
+    with c_1:
         st.markdown("""
-        우리는 어제 들은 음악을 오늘도 듣고, 내일도 들을 것입니다.
-        또한, 출근과 쉬는 날 등의 행동 패턴에 따라서 청취 패턴이 유사하게 반복되기도 합니다.
-        이를테면, 출근하는 시간 마다 특정 플레이리스트를 듣는 식이죠. 
-        이런 식으로, 음악 청취는 시간에 따라 누적되는 패턴과 변화 추세를 보입니다.
-        이러한 패턴과 추세를 포착하는 데에 적합한 모델이 바로 **ARIMA** 모델입니다.
-                    """)
-        st.markdown("### 🧠 Model Overview")
+        #### 📅 **계절성 반영 (S)**""")
+        st.metric("계절성 반영으로 감소한 RMSE", "94.2%")
+        st.caption(""" 변화: 0.00479 (ARIMAX) → 0.00028 (SARIMAX) """)
+        st.info("""
+        음악 스트리밍 데이터는 **요일 단위의 반복적인 소비 패턴**을 보입니다. 실제 분석 결과, **7일 주기 계절성**을 포함했을 때 예측 오차(**RMSE**)가 가장 크게 감소하였고, 이러한 **주간 단위 반복 구조**를 모델에 명시적으로 반영하였습니다.""")
+        
 
+    with c_2:
         st.markdown("""
-        **ARIMA 모델**은 과거의 흐름을 바탕으로 미래를 예측하는 **시계열 모델**로,  
-        시간에 따라 누적되는 **패턴**과 **변화 추세**를 포착하는 데 적합합니다.
+        #### 💥 **외생 변수 결합 (X)**""")
+        st.metric("결합한 외생 변수 수", "6개")
+        st.caption("tiktok views/likes, 뮤직비디오 존재 여부/반응 지표, 뉴스기사 노출")
+        st.info("""
+        단순한 과거 스트리밍 수치뿐만 아니라, **TikTok 노출**, 그리고 **외부 노출량**을 외부 변수로 포함하여  스트리밍 변화의 **원인**을 보다 직접적으로 설명합니다.""")
 
-        본 연구에서는 음악 스트리밍의 특성을 보다 잘 반영하기 위해,     
-        ARIMA를 확장한 **K-SARIMAX 모델**을 사용하였습니다.  
-        이 모델은 유사한 성장 패턴을 가진 곡들을 그룹화(K)하고,  
-        주기적 반복 패턴(S)과 외부 영향 요인(X)을 함께 고려하는 것이 특징입니다.
-        """, unsafe_allow_html=False)
 
-    with right:
-        st.markdown("### 🔍 Key Characteristics of K-SARIMAX")
+    with c_3:
         st.markdown("""
-        #### 📅 **계절성 반영 (Seasonality)**
-        음악 스트리밍 데이터는 **요일 단위의 반복적인 소비 패턴**을 보입니다.  
-        실제 분석 결과, **7일 주기 계절성**을 포함했을 때 예측 오차(**RMSE**)가 가장 크게 감소하여,  
-        **주간 단위 반복 구조**를 모델에 명시적으로 반영하였습니다.
-
-        #### 🌐 **외생 변수 통합 (Exogenous Variables)**
-        단순한 과거 스트리밍 수치뿐만 아니라,  
-        **TikTok 바이럴 노출**과 같은 **SNS 활동**,  
-        그리고 **곡·아티스트·기획사 메타데이터**를 외부 변수로 포함하여  
-        스트리밍 변화의 **원인**을 보다 직접적으로 설명합니다.
-
-        #### 🧩 **그룹별 맞춤형 모델링 (Cluster-based Modeling)**
-        모든 곡을 하나의 모델로 설명하는 대신,  
-        **성장 곡선이 유사한 곡들**을 **클러스터(K)**로 묶어  
-        각 그룹에 **최적화된 SARIMAX 모델**을 개별적으로 적합시켰습니다.  
-        이를 통해 바이럴 반응의 **이질성(Heterogeneity)**을 보다 정밀하게 포착할 수 있습니다.
-        """)
+        #### 📦 **그룹별 맞춤형 모델링 (K)**""")
+        st.metric("칼만 필터 적용으로 얻은 RMSE 감소", '35.7%')
+        st.caption("• SARIMAX : RMSE 0.00028 → KSARIMAX : RMSE 0.00018")
+        st.info("""
+        모든 곡을 하나의 모델로 설명하는 대신, **성장 곡선이 유사한 곡들**을 묶어 각 그룹에 **최적화된 SARIMAX 모델**을 개별적으로 적합시켰습니다. 이를 통해 바이럴 반응의 **이질성(Heterogeneity)**을 보다 정밀하게 포착할 수 있습니다.""")
+    
+    st.caption("언급된 오차는 로그 차분(일일 증가율 차이) 기준으로 측정되었습니다.")
 st.divider()
 
 # 반사실 예시(특정 곡)
 st.header("2) 반사실 추정 예시 (실제 vs 반사실)")
-# with st.container(border=True):
-#     c1, c2 = st.columns([1.1, 0.9])
-#     with c1:
-#         st.subheader("곡 선택")
-#         st.selectbox("곡 선택", options=["(예시) song A", "(예시) song B"], index=0)
-#         st.info("선택 곡 메타 정보 카드 영역")
-#     with c2:
-#         st.subheader("설정")
-#         st.slider("윈도우/기간", 0, 100, 50)
-#         st.checkbox("onset 표시", value=True)
-#         st.checkbox("신뢰구간 표시", value=False)
-
-# st.write("")
-# with st.container(border=True):
-#     st.subheader("라인플롯: Observed vs Counterfactual")
-#     st.info("여기에 실제/반사실 라인플롯 배치")
-
-# st.divider()
-
-# app/pages/2_🧪 Counterfactual.py
 
 import pandas as pd
 import streamlit as st
@@ -162,7 +186,7 @@ with tab1:
 
     with gcol:
         st.subheader("실제 스트리밍 vs 반사실 시나리오")
-        st.caption("일별 스트리밍 흐름을 비교합니다.")
+        st.caption("일별 스트리밍 누적의 흐름을 비교합니다.")
 
         fig1 = go.Figure()
 
@@ -172,6 +196,8 @@ with tab1:
                 y=df_s["observed"],
                 mode="lines",
                 name="Observed",
+                fill = 'tozeroy',
+                fillcolor = 'rgba(135, 206, 250, 0.2)',
                 line=dict(width=3),
             )
         )
@@ -183,6 +209,8 @@ with tab1:
                     y=df_s["counterfactual"],
                     mode="lines",
                     name="Counterfactual",
+                    fill = 'tozeroy',
+                    fillcolor = 'rgba(255, 182, 193, 0.5)',
                     line=dict(dash="dash"),
                 )
             )
@@ -255,6 +283,11 @@ with tab2:
             df_s2["effect"] = df_s2["observed"] - df_s2["counterfactual"]
             df_s2["cum_effect"] = df_s2["effect"].cumsum()
 
+            # ✅ 누적 퍼센트 증가(기간 누적 기준)
+            base = df_s2["counterfactual"].sum()
+            lift = df_s2["effect"].sum()  # = df_s2["cum_effect"].iloc[-1]
+            pct_increase = (lift / base) * 100 if base != 0 else None
+
             fig2 = go.Figure()
             fig2.add_trace(
                 go.Scatter(
@@ -296,23 +329,9 @@ with tab2:
             if "counterfactual" in df_s2.columns:
                 inc_effect = float((df_s2["observed"] - df_s2["counterfactual"]).sum())
                 st.metric("🚀 틱톡이 가져다 준 증가효과 (몇 회 증가했는지)", f"{int(inc_effect):,}")
+                st.metric("누적 증가율", f"{pct_increase:.1f}%")
                 st.caption("정의: (실제 스트리밍) − (틱톡이 없었을 때의 반사실)의 기간 누적 합")
             else:
                 st.metric("🚀 틱톡 증가효과", "N/A")
                 st.caption("Counterfactual 컬럼이 없어 계산 불가")
 
-
-# 상위그룹 ATE
-# st.header("3) 상위 그룹의 ATE")
-# with st.container(border=True):
-#     left, right = st.columns([1, 1])
-#     with left:
-#         st.subheader("ATE 요약")
-#         st.metric("Top group ATE", "—")
-#         st.metric("Cumulative lift", "—")
-#     with right:
-#         st.subheader("분포/비교")
-#         st.info("그룹별 ATE bar/box/violin 등 배치 영역")
-
-# with st.expander("상세 테이블 보기", expanded=False):
-#     st.info("상위 그룹 ATE 테이블(정렬/필터) 영역")

@@ -5,6 +5,11 @@ st.set_page_config(page_title="Strategy / Conclusion", layout="wide")
 st.title("🎯 Strategy & Conclusion")
 st.caption("분석 결과 요약 및 시사점")
 
+# NotebookLM 연결
+link = "https://notebooklm.google.com/notebook/aa9c162f-31d3-4d86-b536-61942d44f21b"
+st.link_button(label = 'for more information', url = link, help = "notebookLM 페이지로 연결됩니다.")
+
+
 # --------------------------------------------------
 # 0) 한 줄 결론 (Hero Message)
 # --------------------------------------------------

@@ -1,0 +1,15 @@
+,feature,importance
+8,existence,0.1778088
+12,class_2.0,0.16633007
+13,class_3.0,0.16565086
+10,release_year,0.06121709
+9,career_years,0.04719043
+5,instrumentalness,0.045641687
+11,class_1.0,0.045106776
+6,danceability,0.0439126
+0,happiness,0.043427043
+4,loudness,0.043017767
+2,acousticness,0.042169314
+1,energy,0.04037942
+7,speechiness,0.039955497
+3,liveness,0.038192604

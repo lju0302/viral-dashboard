@@ -90,7 +90,7 @@ n_songs = "1158" #songs.shape[0]
 date_min = "2023-01-01"  #streaming["date"].min().date()
 date_max = "2024-12-31" #streaming["date"].max().date()
 avg_ate = "평균 40% / 최대 80%" #songs["ate_stream"].mean() * 100
-n_clusters = "6" #songs["cluster"].nunique()
+n_clusters = "4" #songs["cluster"].nunique()
 
 with col1:
     st.markdown(f"""
@@ -115,12 +115,12 @@ with col2:
 with col3:
     st.markdown(f"""
     <div class="kpi-card">
-        <div class="kpi-label">바이럴 유형의 수 (K)</div>
+        <div class="kpi-label">바이럴 유형의 수</div>
         <div class="kpi-value">{n_clusters}</div>
-        <div class="kpi-sub">엘보우, 실루엣 계수 기준</div>
+        <div class="kpi-sub">Reactivity, Retention 기준(자체 계산 지표)</div>
     </div>
     """, unsafe_allow_html=True)
-    # st.metric(label="바이럴 유형의 수 (K)", value=f"{n_clusters}", delta=None, delta_color="normal")
+    # st.metric(label="바이럴 유형의 수", value=f"{n_clusters}", delta=None, delta_color="normal")
 
 with col4:
     st.markdown(f"""
